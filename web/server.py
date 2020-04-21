@@ -14,7 +14,21 @@ app = Flask(__name__)
 def static_content(content):
     return render_template(content)
 
+@app.route('/palindrome/<palabra>')
+def palindromo(palabra):
+    j = 0
+    for i in range(len(palabra)-1, 0, -1):
+        if palabra[i] != palabra[j]:
+            return "No es un palindromo"
+        j = j + 1
+    return "Es un palindromo"
 
+@app.route('/multiplo/<numero1>/<numero2>')
+def multiplo(numero1, numero2):
+    if int(numero2) % int(numero1) == 0:
+        return f'{numero1} es multiplo de {numero2}'
+    else:
+        return f'{numero1} no es multiplo de {numero2}'
 
 
 if __name__ == '__main__':
