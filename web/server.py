@@ -56,18 +56,25 @@ def read_users():
     db_session = db.getSession(engine)
     respuesta = db_session.query(entities.User)
     users = respuesta[:]
-    # retStr = ''
-    # for i in range(len(users)):
-    #     temp_str = f'<h2>User {i}:</h2><br><b>Nombre: {users[i].name}<br>Apellido: {users[i].fullname}<br>Username: {users[i].username}<br>Password: {users[i].password}</h2>'
-    #     retStr = retStr+'<br>'+temp_str
-    # return retStr
-
     retStr = '<table>'
     for i in range(len(users)):
         temp_str = f'<tr><td>{users[i].name}</td><td>{users[i].fullname}</td><td>{users[i].username}</td><td>{users[i].password}</td></tr>'
         retStr = retStr + temp_str
     retStr = retStr + '</table>'
     return retStr
+
+@app.route('/login/<username>/<password>')
+def login(username, password):
+    db_session = db.getSession(engine)
+    rpta = db_session.query(entities.User).filter(
+        entities.User.username == username,
+        entities.User.password == password
+    )
+    users = rpta[:]
+    if len(users) == 1:
+        return f'Welcome {users[0].name} {users[0].fullname}.'
+    else:
+        return "The username or password you entered was incorrect."
 
 if __name__ == '__main__':
     app.secret_key = ".."
